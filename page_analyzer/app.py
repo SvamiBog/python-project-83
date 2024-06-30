@@ -1,7 +1,9 @@
 import os
 import validators
 from flask import Flask, render_template, request, redirect, url_for, flash
-from .db import (open_db_connection, close_db_connection, get_url_by_id, get_all_urls, get_url_details)
+from .db import (open_db_connection, close_db_connection, get_url_by_id,
+                 fetch_and_parse_url, insert_url_check, check_url_exists,
+                 insert_new_url, get_all_urls, get_url_details)
 from dotenv import load_dotenv
 from .utils import format_date, normalize_url
 
@@ -9,6 +11,7 @@ from .utils import format_date, normalize_url
 load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'fallback-secret-key')
+app.jinja_env.filters['date'] = format_date
 
 
 @app.route('/urls/<int:id>/checks', methods=['POST'])
