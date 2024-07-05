@@ -1,5 +1,6 @@
 import os
 import psycopg2
+from psycopg2 import extras
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 import requests
@@ -12,6 +13,7 @@ DATABASE_URL = os.getenv('DATABASE_URL')
 
 def get_db_connection():
     conn = psycopg2.connect(DATABASE_URL)
+    conn.cursor_factory = extras.DictCursor
     return conn
 
 
@@ -71,7 +73,7 @@ def check_url_exists(cur, url):
 
 def insert_new_url(cur, url):
     cur.execute('INSERT INTO urls (name, created_at) VALUES (%s, %s) RETURNING id', (url, datetime.now()))
-    return cur.fetchone()['id']
+    return cur.fetchone()[0]
 
 
 def get_all_urls():
@@ -86,7 +88,6 @@ def get_all_urls():
     urls_data = cur.fetchall()
     conn.close()
     return urls_data
-
 
 def get_url_details(url_id):
     conn, cur = open_db_connection()

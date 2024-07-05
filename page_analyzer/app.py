@@ -53,7 +53,9 @@ def add_url():
             flash('Страница уже существует', 'alert-info')
             redirect_url = redirect(url_for('url_details', id=existing_url['id']))
         else:
+            flash('Этап 1', 'alert-info')
             url_id = insert_new_url(cur, normalized_url)
+            flash('Этап 2', 'alert-info')
             conn.commit()
             flash('Страница успешно добавлена', 'alert-success')
             redirect_url = redirect(url_for('url_details', id=url_id))
@@ -70,6 +72,7 @@ def add_url():
 @app.route('/urls')
 def urls():
     urls_data = get_all_urls()
+    print(urls_data)
     return render_template('urls.html', urls=urls_data)
 
 
