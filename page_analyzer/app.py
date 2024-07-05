@@ -53,9 +53,7 @@ def add_url():
             flash('Страница уже существует', 'alert-info')
             redirect_url = redirect(url_for('url_details', id=existing_url['id']))
         else:
-            flash('Этап 1', 'alert-info')
             url_id = insert_new_url(cur, normalized_url)
-            flash('Этап 2', 'alert-info')
             conn.commit()
             flash('Страница успешно добавлена', 'alert-success')
             redirect_url = redirect(url_for('url_details', id=url_id))
