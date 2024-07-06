@@ -67,14 +67,13 @@ def add_url():
     return redirect_url
 
 
-@app.route('/urls')
+@app.route('/urls', methods=['GET'])
 def urls():
     urls_data = get_all_urls()
-    print(urls_data)
     return render_template('urls.html', urls=urls_data)
 
 
-@app.route('/urls/<int:id>')
+@app.route('/urls/<int:id>', methods=['GET'])
 def url_details(id):
     url_data, checks = get_url_details(id)
     return render_template('url.html', url=url_data, checks=checks)

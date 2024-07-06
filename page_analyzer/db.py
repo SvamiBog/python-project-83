@@ -85,9 +85,9 @@ def get_all_urls():
         GROUP BY u.id
         ORDER BY u.created_at DESC
     ''')
-    urls_data = cur.fetchall()
+    rows = cur.fetchall()
     conn.close()
-    return urls_data
+    return rows
 
 def get_url_details(url_id):
     conn, cur = open_db_connection()
