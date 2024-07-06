@@ -73,7 +73,7 @@ def check_url_exists(cur, url):
 
 def insert_new_url(cur, url):
     cur.execute('INSERT INTO urls (name, created_at) VALUES (%s, %s) RETURNING id', (url, datetime.now()))
-    return cur.fetchone()[0]
+    return cur.fetchone()['id']
 
 
 def get_all_urls():
