@@ -16,11 +16,9 @@ gunicorn = "^22.0.0"
 flake8 = "^7.0.0"
 python-dotenv = "^1.0.1"
 validators = "^0.20.0"
-psycopg2-binary = "^2.9.9"
 python-dateutil = "^2.9.0.post0"
 beautifulsoup4 = "^4.12.3"
 requests = "^2.32.3"
-psycopg2 = "^2.9.9"
 
 
 [build-system]
