@@ -21,15 +21,15 @@ def create_check(id):
     with Database() as db:
         url = get_url_by_id(db.conn, id)
         if url:
-            result = fetch_and_parse_url(url)
+            result = fetch_and_parse_url(url['name'])
             if 'error' not in result:
                 insert_url_check(db.conn, id, result)
                 flash('Страница успешно проверена', 'alert-success')
             else:
-                flash(result['error'], 'alert-danger')
+                flash('Произошла ошибка при проверке', 'alert-danger')
         else:
             flash('URL не найден', 'alert-danger')
-    return redirect(url_for('url', id=id))
+    return redirect(url_for('show_url_details', id=id))
 
 
 @app.route('/')
