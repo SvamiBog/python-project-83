@@ -4,16 +4,13 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from dotenv import load_dotenv
 from .db import (Database, get_url_by_id, fetch_and_parse_url, insert_url_check, check_url_exists,
                  insert_new_url, get_all_urls, get_url_details)
-from .utils import normalize_url
+from .utils import format_date, normalize_url
+
 
 load_dotenv()
 app = Flask(__name__)
+app.jinja_env.filters['date'] = format_date
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'fallback-secret-key')
-
-
-@app.template_filter('date')
-def format_date(value):
-    return value.strftime('%Y-%m-%d %H:%M:%S') if value else ''
 
 
 @app.route('/urls/<int:id>/checks', methods=['POST'])
