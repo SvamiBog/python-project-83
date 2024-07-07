@@ -11,24 +11,15 @@ load_dotenv()
 DATABASE_URL = os.getenv('DATABASE_URL')
 
 
-def get_db_connection():
-    conn = psycopg2.connect(DATABASE_URL)
-    conn.cursor_factory = extras.DictCursor
-    return conn
-
-
 def open_db_connection():
-    conn = get_db_connection()
-    cur = conn.cursor()
+    conn = psycopg2.connect(os.getenv('DATABASE_URL'))
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     return conn, cur
 
 
 def close_db_connection(conn, cur):
-    if cur is not None:
-        cur.close()
-    if conn is not None:
-        conn.close()
-
+    cur.close()
+    conn.close()
 
 def get_url_by_id(conn, id):
     cur = conn.cursor()
@@ -78,16 +69,22 @@ def insert_new_url(cur, url):
 
 def get_all_urls():
     conn, cur = open_db_connection()
-    cur.execute('''
-        SELECT u.id, u.name, MAX(c.created_at) AS last_checked, MAX(c.status_code) AS last_status_code
-        FROM urls u
-        LEFT JOIN url_checks c ON u.id = c.url_id
-        GROUP BY u.id
-        ORDER BY u.created_at DESC
-    ''')
-    rows = cur.fetchall()
-    conn.close()
+    try:
+        cur.execute('''
+            SELECT u.id, u.name, MAX(c.created_at) AS last_checked, MAX(c.status_code) AS last_status_code
+            FROM urls u
+            LEFT JOIN url_checks c ON u.id = c.url_id
+            GROUP BY u.id
+            ORDER BY u.created_at DESC
+        ''')
+        rows = cur.fetchall()
+    except Exception as e:
+        print(f"Error fetching URLs: {e}")
+        rows = []
+    finally:
+        close_db_connection(conn, cur)
     return rows
+
 
 def get_url_details(url_id):
     conn, cur = open_db_connection()
