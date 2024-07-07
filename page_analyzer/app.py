@@ -1,5 +1,6 @@
 import os
 import validators
+from urllib.parse import urlparse
 from flask import Flask, render_template, request, redirect, url_for, flash
 from .db import (open_db_connection, close_db_connection, get_url_by_id,
                  fetch_and_parse_url, insert_url_check, check_url_exists,
