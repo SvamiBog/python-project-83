@@ -14,7 +14,7 @@ DATABASE_URL = os.getenv('DATABASE_URL')
 class Database:
     def __enter__(self):
         self.conn = psycopg2.connect(DATABASE_URL)
-        self.cur = self.conn.cursor(cursor_factory=extras.DictCursor)
+        self.cur = self.conn.cursor(cursor_factory=extras.RealDictCursor)
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -23,7 +23,7 @@ class Database:
 
 
 def get_url_by_id(conn, id):
-    with conn.cursor(cursor_factory=extras.DictCursor) as cur:
+    with conn.cursor(cursor_factory=extras.RealDictCursor) as cur:
         cur.execute('SELECT * FROM urls WHERE id = %s', (id,))
         result = cur.fetchone()
     return result['name'] if result else None
@@ -55,13 +55,13 @@ def insert_url_check(conn, url_id, data):
 
 
 def check_url_exists(conn, url):
-    with conn.cursor() as cur:
+    with conn.cursor(cursor_factory=extras.RealDictCursor) as cur:
         cur.execute('SELECT id FROM urls WHERE name = %s', (url,))
         return cur.fetchone()
 
 
 def insert_new_url(conn, url):
-    with conn.cursor() as cur:
+    with conn.cursor(cursor_factory=extras.RealDictCursor) as cur:
         cur.execute('INSERT INTO urls (name, created_at) VALUES (%s, %s) RETURNING id', (url, datetime.now()))
         conn.commit()
         return cur.fetchone()['id']
