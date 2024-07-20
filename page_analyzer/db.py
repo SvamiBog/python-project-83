@@ -26,7 +26,7 @@ def get_url_by_id(conn, id):
     with conn.cursor(cursor_factory=extras.RealDictCursor) as cur:
         cur.execute('SELECT * FROM urls WHERE id = %s', (id,))
         result = cur.fetchone()
-    return result['name'] if result else None
+    return result['name'] if result else ''
 
 
 def fetch_and_parse_url(url):
@@ -35,9 +35,9 @@ def fetch_and_parse_url(url):
         if response.status_code == 200:
             soup = BeautifulSoup(response.content, 'html.parser')
             return {
-                'title': soup.find('title').text if soup.find('title') else None,
-                'h1': soup.find('h1').text if soup.find('h1') else None,
-                'description': soup.find('meta', attrs={'name': 'description'})['content'] if soup.find('meta', attrs={'name': 'description'}) else None,
+                'title': soup.find('title').text if soup.find('title') else '',
+                'h1': soup.find('h1').text if soup.find('h1') else '',
+                'description': soup.find('meta', attrs={'name': 'description'})['content'] if soup.find('meta', attrs={'name': 'description'}) else '',
                 'status_code': response.status_code
             }
         else:
