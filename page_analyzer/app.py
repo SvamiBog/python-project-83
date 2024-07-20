@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 from .web import fetch_and_parse_url
 from .db import (Database, get_url_by_id, insert_url_check, check_url_exists,
                  insert_new_url, get_all_urls, get_url_details)
-from .utils import format_date, normalize_url
+from .url_utils import normalize_url
+from .formatting import format_date
 
 
 load_dotenv()

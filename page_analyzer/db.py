@@ -2,8 +2,6 @@ import os
 import psycopg2
 from psycopg2 import extras
 from dotenv import load_dotenv
-from bs4 import BeautifulSoup
-import requests
 from datetime import datetime
 
 
