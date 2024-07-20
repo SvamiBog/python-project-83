@@ -2,7 +2,8 @@ import os
 import validators
 from flask import Flask, render_template, request, redirect, url_for, flash
 from dotenv import load_dotenv
-from .db import (Database, get_url_by_id, fetch_and_parse_url, insert_url_check, check_url_exists,
+from .web import fetch_and_parse_url
+from .db import (Database, get_url_by_id, insert_url_check, check_url_exists,
                  insert_new_url, get_all_urls, get_url_details)
 from .utils import format_date, normalize_url
 
