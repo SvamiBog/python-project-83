@@ -17,7 +17,7 @@ def parse_html(html):
     h1 = soup.find('h1').text if soup.find('h1') else ''
     description_tag = soup.find('meta', attrs={'name': 'description'})
     description = description_tag['content'] if description_tag else ''
-    
+
     return {
         'title': title,
         'h1': h1,
