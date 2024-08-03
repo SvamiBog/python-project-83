@@ -20,34 +20,34 @@ class Database:
         self.conn.close()
 
 
-def get_url_by_id(conn, id):
-    with conn.cursor(cursor_factory=extras.RealDictCursor) as cur:
-        cur.execute('SELECT * FROM urls WHERE id = %s', (id,))
-        result = cur.fetchone()
+def get_url_by_id(id):
+    with Database() as db:
+        db.cur.execute('SELECT * FROM urls WHERE id = %s', (id,))
+        result = db.cur.fetchone()
     return result['name'] if result else ''
 
 
-def insert_url_check(conn, url_id, data):
-    with conn.cursor() as cur:
-        cur.execute(
+def insert_url_check(url_id, data):
+    with Database() as db:
+        db.cur.execute(
             'INSERT INTO url_checks (url_id, status_code, h1, title, description, created_at) '
             'VALUES (%s, %s, %s, %s, %s, %s)',
             (url_id, data['status_code'], data['h1'], data['title'], data['description'], datetime.now())
         )
-        conn.commit()
+        db.conn.commit()
 
 
-def check_url_exists(conn, url):
-    with conn.cursor(cursor_factory=extras.RealDictCursor) as cur:
-        cur.execute('SELECT id FROM urls WHERE name = %s', (url,))
-        return cur.fetchone()
+def check_url_exists(url):
+    with Database() as db:
+        db.cur.execute('SELECT id FROM urls WHERE name = %s', (url,))
+        return db.cur.fetchone()
 
 
-def insert_new_url(conn, url):
-    with conn.cursor(cursor_factory=extras.RealDictCursor) as cur:
-        cur.execute('INSERT INTO urls (name, created_at) VALUES (%s, %s) RETURNING id', (url, datetime.now()))
-        conn.commit()
-        return cur.fetchone()['id']
+def insert_new_url(url):
+    with Database() as db:
+        db.cur.execute('INSERT INTO urls (name, created_at) VALUES (%s, %s) RETURNING id', (url, datetime.now()))
+        db.conn.commit()
+        return db.cur.fetchone()['id']
 
 
 def get_all_urls():
